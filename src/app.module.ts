@@ -13,7 +13,6 @@ import { ReviewsModule } from './reviews/reviews.module';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -43,4 +42,3 @@ import { SequelizeModule } from '@nestjs/sequelize';
   ],
 })
 export class AppModule {}
-

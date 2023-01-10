@@ -14,6 +14,11 @@ export class Subscription extends Model {
   id: number;
 
   @Column({
+    type: DataType.STRING,
+  })
+  table_name: string;
+
+  @Column({
     type: DataType.INTEGER,
   })
   subscriber_id: number;
