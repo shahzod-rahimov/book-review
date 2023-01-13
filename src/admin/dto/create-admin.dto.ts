@@ -1,4 +1,4 @@
-import { IsPhoneNumber, IsString, Min } from 'class-validator';
+import { IsPhoneNumber, IsString, Length, Min } from 'class-validator';
 
 export class CreateAdminDto {
   @IsString()
@@ -9,6 +9,8 @@ export class CreateAdminDto {
   @IsPhoneNumber('UZ')
   readonly phone_number: string;
   @IsString()
-  @Min(5, { message: 'Password is too short!' })
-  readonly hashed_password: string;
+  @Length(5, 15, {
+    message: "Parolning uzunligi 5 dan katta 15 dan kichik bo'lishi kerak",
+  })
+  hashed_password: string;
 }

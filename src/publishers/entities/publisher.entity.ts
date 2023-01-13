@@ -50,9 +50,9 @@ export class Publisher extends Model {
   socials_id: number;
 
   @Column({
-    type: DataType.SMALLINT,
+    type: DataType.STRING,
   })
-  photo_file: number;
+  photo_file: string;
 
   @Column({
     type: DataType.INTEGER,
