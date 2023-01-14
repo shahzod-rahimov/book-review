@@ -11,9 +11,8 @@ import { CreateAdminDto } from './dto';
 import { UpdateAdminDto } from './dto';
 import { Admin } from './entities/admin.entity';
 import * as bcrypt from 'bcryptjs';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { LoginAdminDto } from './dto';
-import { JwtPayload } from './types';
 
 @Injectable()
 export class AdminService {
@@ -147,7 +146,7 @@ export class AdminService {
     };
   }
 
-  private async updateRefreshTokenHash(userId: number, refreshToken: string) {
+  async updateRefreshTokenHash(userId: number, refreshToken: string) {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 7);
     await this.adminModel.update(
       { hashed_refresh_token: hashedRefreshToken },

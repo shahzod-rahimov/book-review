@@ -1,10 +1,12 @@
+import { Type } from 'class-transformer';
 import {
+  IsDate,
   IsDateString,
   IsEmail,
   IsNumber,
   IsPhoneNumber,
   IsString,
-  Min,
+  Length,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -20,14 +22,16 @@ export class CreateUserDto {
   @IsEmail()
   readonly email: string;
   @IsString()
-  @Min(5)
-  readonly hashed_password: string;
+  @Length(5)
+  hashed_password: string;
   @IsString()
   readonly gender: string;
+  @Type(() => Number)
   @IsNumber()
   readonly socials_id: number;
   // @IsString()
   // readonly photo_file_name: string;
-  @IsDateString()
+  @Type(() => Date)
+  @IsDate()
   readonly birthday: Date;
 }

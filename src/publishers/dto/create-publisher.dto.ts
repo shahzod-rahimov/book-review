@@ -3,8 +3,10 @@ import {
   IsNumber,
   IsPhoneNumber,
   IsString,
-  Min,
+  Length,
 } from 'class-validator';
+
+import { Type } from 'class-transformer';
 
 export class CreatePublisherDto {
   @IsString()
@@ -15,14 +17,16 @@ export class CreatePublisherDto {
   @IsEmail()
   readonly email: string;
   @IsString()
-  @Min(5)
-  readonly hashed_password: string;
+  @Length(5)
+  hashed_password: string;
   @IsString()
   readonly location: string;
+  @Type(() => Number)
   @IsNumber()
   readonly socials_id: number;
-  @IsString()
-  readonly photo_file_name: string;
+  // @IsString()
+  // readonly photo_file_name: string;
+  @Type(() => Number)
   @IsNumber()
   readonly book_id: number;
 }

@@ -40,6 +40,7 @@ export class AdminController {
     return this.adminService.login(loginAdminDto, res);
   }
 
+  @UseGuards(RefreshTokenGuard)
   @Post('logout')
   logout(
     @GetCurrentUserId() adminId: number,

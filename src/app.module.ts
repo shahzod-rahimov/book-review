@@ -12,11 +12,17 @@ import { FaqModule } from './faq/faq.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { FilesModule } from './files/files.module';
+import { resolve } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: resolve(__dirname, 'static'),
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
@@ -39,6 +45,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
     BookPhotosModule,
     FaqModule,
     ReviewsModule,
+    FilesModule,
   ],
 })
 export class AppModule {}
