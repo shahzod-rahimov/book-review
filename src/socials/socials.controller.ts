@@ -1,15 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { SocialsService } from './socials.service';
 import { CreateSocialDto } from './dto/create-social.dto';
 import { UpdateSocialDto } from './dto/update-social.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('socials')
 export class SocialsController {
   constructor(private readonly socialsService: SocialsService) {}
 
   @Post()
-  create(@Body() createSocialDto: CreateSocialDto) {
-    return this.socialsService.create(createSocialDto);
+  @UseInterceptors(FileInterceptor('image'))
+  create(@Body() createSocialDto: CreateSocialDto, @UploadedFile() image: any) {
+    return this.socialsService.create(createSocialDto, image);
   }
 
   @Get()

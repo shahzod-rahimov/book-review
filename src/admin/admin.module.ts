@@ -20,10 +20,10 @@ import {
     AccessTokenStrategy,
     RefreshTokenCookieStrategy,
     // RefreshTokenStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: AccessTokenGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AccessTokenGuard,
+    // },
   ],
 })
 export class AdminModule {}

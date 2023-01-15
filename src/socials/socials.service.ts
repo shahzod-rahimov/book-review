@@ -1,26 +1,63 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
+import { FilesService } from '../files/files.service';
 import { CreateSocialDto } from './dto/create-social.dto';
 import { UpdateSocialDto } from './dto/update-social.dto';
+import { Social } from './entities/social.entity';
 
 @Injectable()
 export class SocialsService {
-  create(createSocialDto: CreateSocialDto) {
-    return 'This action adds a new social';
+  constructor(
+    @InjectModel(Social) private socialModel: typeof Social,
+    private readonly fileService: FilesService,
+  ) {}
+
+  async create(createSocialDto: CreateSocialDto, image: any) {
+    const img = await this.fileService.createFile(image);
+
+    return this.socialModel.create({
+      ...createSocialDto,
+      social_icon_file_name: img,
+    });
   }
 
   findAll() {
-    return `This action returns all socials`;
+    return this.socialModel.findAll({ include: { all: true } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} social`;
+  async findOne(id: number) {
+    const subscription = await this.socialModel.findOne({
+      where: { id },
+      include: { all: true },
+    });
+    if (!subscription) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
+    return subscription;
   }
 
-  update(id: number, updateSocialDto: UpdateSocialDto) {
-    return `This action updates a #${id} social`;
+  async update(id: number, updateSocialDto: UpdateSocialDto) {
+    const subscription = await this.socialModel.update(
+      { ...updateSocialDto },
+      { where: { id } },
+    );
+
+    if (!subscription[0]) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
+
+    return 'Updated';
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} social`;
+  async remove(id: number) {
+    const subscription = await this.socialModel.destroy({
+      where: { id },
+    });
+
+    if (!subscription) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
+
+    return 'Deleted';
   }
 }
