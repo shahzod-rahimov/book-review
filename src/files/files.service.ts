@@ -26,4 +26,19 @@ export class FilesService {
       );
     }
   }
+
+  async deleteFile(fileName): Promise<void> {
+    try {
+      const filePath = path.join(__dirname, '..', 'static');
+      if (!fileName) return;
+
+      fs.unlinkSync(path.join(filePath, fileName));
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        "Faylni o'chirishda xatolik",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

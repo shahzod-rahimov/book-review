@@ -129,12 +129,13 @@ export class PublishersService {
   }
 
   async remove(id: number) {
-    const publisher = await this.publisherModel.destroy({ where: { id } });
+    const publisher = await this.publisherModel.findOne({ where: { id } });
 
     if (!publisher) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
-
+    this.fileService.deleteFile(publisher.dataValues.photo_file);
+    publisher.destroy();
     return 'Deleted';
   }
 

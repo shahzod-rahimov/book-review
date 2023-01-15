@@ -15,7 +15,6 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 
-
 @Injectable()
 export class UsersService {
   constructor(
@@ -27,14 +26,21 @@ export class UsersService {
   async register(createUserDto: CreateUserDto, image: any, res: Response) {
     const img = await this.fileService.createFile(image);
 
-    const condidate = await this.userModel.findOne({
+    const user_phone = await this.userModel.findOne({
       where: {
         phone_number: createUserDto.phone_number,
       },
     });
 
-    if (condidate) {
+    const username = await this.userModel.findOne({
+      where: { username: createUserDto.username },
+    });
+
+    if (user_phone)
       throw new BadRequestException('Bunday telefon raqam mavjud');
+
+    if (username) {
+      throw new BadRequestException('Bunday username mavjud');
     }
 
     const hashedPassword = await bcrypt.hash(createUserDto.hashed_password, 7);
@@ -122,12 +128,14 @@ export class UsersService {
   }
 
   async remove(id: number) {
-    const user = await this.userModel.destroy({ where: { id } });
+    const user = await this.userModel.findOne({ where: { id } });
+    // const user = await this.userModel.destroy({ where: { id } });
 
     if (!user) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
-
+    this.fileService.deleteFile(user.dataValues.photo_file_name);
+    user.destroy();
     return 'Deleted';
   }
 
