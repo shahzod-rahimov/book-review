@@ -19,11 +19,19 @@ import { RefreshTokenGuard } from '../common/guards';
 import { LoginPublisherDto } from './dto/login-publisher.dto';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Publisher } from './entities/publisher.entity';
 
+@ApiTags('Publishers')
 @Controller('publishers')
 export class PublishersController {
   constructor(private readonly publishersService: PublishersService) {}
 
+  @ApiOperation({ summary: 'Register publisher' })
+  @ApiResponse({
+    status: 201,
+    description: 'Return Access token and Refresh token',
+  })
   @Public()
   @Post('auth/register')
   @UseInterceptors(FileInterceptor('photo_file'))
@@ -35,6 +43,11 @@ export class PublishersController {
     return this.publishersService.register(createPublisherDto, image, res);
   }
 
+  @ApiOperation({ summary: 'Login publisher' })
+  @ApiResponse({
+    status: 201,
+    description: 'Return Access token and Refresh token',
+  })
   @Public()
   @Post('auth/login')
   login(
@@ -44,6 +57,11 @@ export class PublishersController {
     return this.publishersService.login(loginPublisherDto, res);
   }
 
+  @ApiOperation({ summary: 'Register publisher' })
+  @ApiResponse({
+    status: 201,
+    description: 'Return msg',
+  })
   @Post('logout')
   logout(
     @GetCurrentUserId() publisherId: number,
@@ -55,6 +73,11 @@ export class PublishersController {
     // req.admin['id']
   }
 
+  @ApiOperation({ summary: 'Update publisher refreshtoken' })
+  @ApiResponse({
+    status: 201,
+    description: 'Return Access token and Refresh token',
+  })
   @Public()
   @UseGuards(RefreshTokenGuard)
   @Post('refresh')
@@ -66,16 +89,31 @@ export class PublishersController {
     return this.publishersService.refreshToken(userId, refreshToken, res);
   }
 
+  @ApiOperation({ summary: 'Get all publishers' })
+  @ApiResponse({
+    status: 201,
+    type: [Publisher],
+  })
   @Get()
   findAll() {
     return this.publishersService.findAll();
   }
 
+  @ApiOperation({ summary: 'Get publisher' })
+  @ApiResponse({
+    status: 201,
+    type: Publisher,
+  })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.publishersService.findOne(+id);
   }
 
+  @ApiOperation({ summary: 'Update publisher' })
+  @ApiResponse({
+    status: 201,
+    description: 'Return msg',
+  })
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -84,6 +122,11 @@ export class PublishersController {
     return this.publishersService.update(+id, updatePublisherDto);
   }
 
+  @ApiOperation({ summary: 'Delete publisher' })
+  @ApiResponse({
+    status: 201,
+    description: 'Return msg',
+  })
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.publishersService.remove(+id);
