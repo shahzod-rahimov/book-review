@@ -1,4 +1,12 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
+import { Book } from '../../books/entities/book.entity';
 
 @Table({ tableName: 'book-photos' })
 export class BookPhoto extends Model {
@@ -20,8 +28,12 @@ export class BookPhoto extends Model {
   })
   photo_alt_string: string;
 
+  @ForeignKey(() => Book)
   @Column({
     type: DataType.INTEGER,
   })
   book_id: number;
+
+  @BelongsTo(() => Book)
+  book: Book;
 }

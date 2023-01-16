@@ -1,4 +1,12 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
+import { Social } from '../../socials/entities/social.entity';
 
 @Table({ tableName: 'users' })
 export class User extends Model {
@@ -53,6 +61,7 @@ export class User extends Model {
   })
   gender: string;
 
+  @ForeignKey(() => Social)
   @Column({
     type: DataType.INTEGER,
   })
@@ -67,4 +76,7 @@ export class User extends Model {
     type: DataType.STRING,
   })
   hashed_refresh_token: string;
+
+  @BelongsTo(() => Social)
+  social: Social;
 }

@@ -1,4 +1,13 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
+import { Book } from '../../books/entities/book.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Table({ tableName: 'reviews' })
 export class Review extends Model {
@@ -13,8 +22,8 @@ export class Review extends Model {
   @Column({
     type: DataType.STRING,
     validate: {
-      min: 7
-    }
+      min: 7,
+    },
   })
   title: string;
 
@@ -28,13 +37,21 @@ export class Review extends Model {
   })
   is_checked: string;
 
+  @ForeignKey(() => Book)
   @Column({
     type: DataType.INTEGER,
   })
   book_id: number;
 
+  @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
   })
   user_id: number;
+
+  @BelongsTo(() => Book)
+  book: Book;
+
+  @BelongsTo(() => User)
+  user: User;
 }

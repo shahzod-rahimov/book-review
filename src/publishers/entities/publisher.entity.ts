@@ -1,4 +1,13 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
+import { Book } from '../../books/entities/book.entity';
+import { Social } from '../../socials/entities/social.entity';
 
 @Table({ tableName: 'publishers' })
 export class Publisher extends Model {
@@ -44,6 +53,7 @@ export class Publisher extends Model {
   })
   location: string;
 
+  @ForeignKey(() => Social)
   @Column({
     type: DataType.SMALLINT,
   })
@@ -54,6 +64,7 @@ export class Publisher extends Model {
   })
   photo_file: string;
 
+  @ForeignKey(() => Book)
   @Column({
     type: DataType.INTEGER,
   })
@@ -63,4 +74,10 @@ export class Publisher extends Model {
     type: DataType.STRING,
   })
   hashed_refresh_token: string;
+
+  @BelongsTo(() => Social)
+  social: Social;
+
+  @BelongsTo(() => Book)
+  book: Book;
 }
