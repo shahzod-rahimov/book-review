@@ -79,4 +79,7 @@ export class User extends Model {
 
   @BelongsTo(() => Social)
   social: Social;
+
+  @Column({ type: DataType.STRING, defaultValue: 'USER' })
+  role: string;
 }

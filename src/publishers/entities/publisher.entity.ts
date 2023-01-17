@@ -80,4 +80,7 @@ export class Publisher extends Model {
 
   @BelongsTo(() => Book)
   book: Book;
+
+  @Column({ type: DataType.STRING, defaultValue: 'PUBLISHER' })
+  role: string;
 }

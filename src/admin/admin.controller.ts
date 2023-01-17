@@ -13,7 +13,12 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { GetCurrentUserId, Public } from '../common/decorators';
 import { GetCurrentUser } from '../common/decorators/get-current-user.decorator';
-import { RefreshTokenGuard } from '../common/guards';
+import { Roles } from '../common/decorators/roles-auth.decorator';
+import {
+  RefreshTokenGuard,
+  RolesCookieGuard,
+  RolesGuard,
+} from '../common/guards';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto';
 import { LoginAdminDto } from './dto';
@@ -75,6 +80,8 @@ export class AdminController {
     description: 'Return Access token and Refresh token',
   })
   @Public()
+  @Roles('ADMIN')
+  @UseGuards(RolesCookieGuard)
   @UseGuards(RefreshTokenGuard)
   @Post('refresh')
   async refreshToken(
@@ -90,6 +97,8 @@ export class AdminController {
     status: 201,
     type: [Admin],
   })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Get()
   findAll() {
     return this.adminService.findAll();
@@ -100,6 +109,8 @@ export class AdminController {
     status: 201,
     type: Admin,
   })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.adminService.findOne(+id);
@@ -110,6 +121,8 @@ export class AdminController {
     status: 201,
     description: 'Return msg',
   })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAdminDto: UpdateAdminDto) {
     return this.adminService.update(+id, updateAdminDto);
@@ -120,6 +133,8 @@ export class AdminController {
     status: 201,
     description: 'Return msg',
   })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.adminService.remove(+id);

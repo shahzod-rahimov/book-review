@@ -15,6 +15,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { FilesModule } from './files/files.module';
 import { resolve } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { APP_GUARD } from '@nestjs/core';
+import { AccessTokenGuard } from './common/guards';
 
 @Module({
   imports: [
@@ -46,6 +48,12 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     FaqModule,
     ReviewsModule,
     FilesModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AccessTokenGuard,
+    },
   ],
 })
 export class AppModule {}

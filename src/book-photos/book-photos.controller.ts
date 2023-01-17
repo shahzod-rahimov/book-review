@@ -8,6 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Roles } from '../common/decorators/roles-auth.decorator';
 import { BookPhotosService } from './book-photos.service';
 import { CreateBookPhotoDto } from './dto/create-book-photo.dto';
 import { UpdateBookPhotoDto } from './dto/update-book-photo.dto';

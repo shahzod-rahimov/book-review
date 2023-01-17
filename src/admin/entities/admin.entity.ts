@@ -41,4 +41,7 @@ export class Admin extends Model {
     type: DataType.STRING,
   })
   hashed_refresh_token: string;
+
+  @Column({ type: DataType.STRING, defaultValue: 'ADMIN' })
+  role: string;
 }

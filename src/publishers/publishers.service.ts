@@ -14,6 +14,7 @@ import { LoginPublisherDto } from './dto/login-publisher.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { FilesService } from '../files/files.service';
+import { JwtPayload } from './types';
 
 @Injectable()
 export class PublishersService {
@@ -139,10 +140,11 @@ export class PublishersService {
     return 'Deleted';
   }
 
-  private async getTokens(id: number, phone_number: string) {
-    const jwtPayload = {
+  private async getTokens(id: number, phone_number: string, role: string) {
+    const jwtPayload: JwtPayload = {
       id,
       phone_number,
+      role,
     };
 
     const [access_token, refresh_token] = await Promise.all([
@@ -171,7 +173,11 @@ export class PublishersService {
   }
 
   private async getCookies(publisher: Publisher, res: Response) {
-    const tokens = await this.getTokens(publisher.id, publisher.phone_number);
+    const tokens = await this.getTokens(
+      publisher.id,
+      publisher.phone_number,
+      publisher.role,
+    );
     await this.updateRefreshTokenHash(publisher.id, tokens.refresh_token);
 
     res.cookie('refresh_token', tokens.refresh_token, {

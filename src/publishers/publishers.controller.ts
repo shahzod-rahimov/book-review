@@ -15,13 +15,17 @@ import { PublishersService } from './publishers.service';
 import { CreatePublisherDto } from './dto/create-publisher.dto';
 import { UpdatePublisherDto } from './dto/update-publisher.dto';
 import { GetCurrentUser, GetCurrentUserId, Public } from '../common/decorators';
-import { RefreshTokenGuard } from '../common/guards';
 import { LoginPublisherDto } from './dto/login-publisher.dto';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Publisher } from './entities/publisher.entity';
-
+import {
+  RefreshTokenGuard,
+  RolesCookieGuard,
+  RolesGuard,
+} from '../common/guards';
+import { Roles } from '../common/decorators/roles-auth.decorator';
 @ApiTags('Publishers')
 @Controller('publishers')
 export class PublishersController {
@@ -62,6 +66,8 @@ export class PublishersController {
     status: 201,
     description: 'Return msg',
   })
+  @Roles('ADMIN', 'PUBLISHERS')
+  @UseGuards(RolesGuard)
   @Post('logout')
   logout(
     @GetCurrentUserId() publisherId: number,
@@ -79,6 +85,8 @@ export class PublishersController {
     description: 'Return Access token and Refresh token',
   })
   @Public()
+  @Roles('ADMIN', 'PUBLISHERS')
+  @UseGuards(RolesCookieGuard)
   @UseGuards(RefreshTokenGuard)
   @Post('refresh')
   async refreshToken(
@@ -94,6 +102,8 @@ export class PublishersController {
     status: 201,
     type: [Publisher],
   })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Get()
   findAll() {
     return this.publishersService.findAll();
@@ -104,6 +114,8 @@ export class PublishersController {
     status: 201,
     type: Publisher,
   })
+  @Roles('ADMIN', 'PUBLISHERS')
+  @UseGuards(RolesGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.publishersService.findOne(+id);
@@ -114,6 +126,8 @@ export class PublishersController {
     status: 201,
     description: 'Return msg',
   })
+  @Roles('ADMIN', 'PUBLISHERS')
+  @UseGuards(RolesGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -127,6 +141,8 @@ export class PublishersController {
     status: 201,
     description: 'Return msg',
   })
+  @Roles('ADMIN', 'PUBLISHERS')
+  @UseGuards(RolesGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.publishersService.remove(+id);

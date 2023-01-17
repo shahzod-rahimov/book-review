@@ -18,9 +18,14 @@ import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GetCurrentUser, GetCurrentUserId, Public } from '../common/decorators';
 import { LoginUserDto } from './dto/login-user.dto';
-import { RefreshTokenGuard } from '../common/guards';
+import {
+  RefreshTokenGuard,
+  RolesCookieGuard,
+  RolesGuard,
+} from '../common/guards';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { Roles } from '../common/decorators/roles-auth.decorator';
 
 @ApiTags('User')
 @Controller('users')
@@ -62,6 +67,8 @@ export class UsersController {
     status: 201,
     description: 'Return msg',
   })
+  @Roles('ADMIN', 'USER')
+  @UseGuards(RolesGuard)
   @Post('logout')
   logout(
     @GetCurrentUserId() publisherId: number,
@@ -78,6 +85,8 @@ export class UsersController {
     description: 'Return Access token and Refresh token',
   })
   @Public()
+  @Roles('ADMIN', 'USER')
+  @UseGuards(RolesCookieGuard)
   @UseGuards(RefreshTokenGuard)
   @Post('refresh')
   async refreshToken(
@@ -93,6 +102,8 @@ export class UsersController {
     status: 201,
     type: [User],
   })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();
@@ -103,6 +114,8 @@ export class UsersController {
     status: 201,
     type: User,
   })
+  @Roles('USER', 'ADMIN')
+  @UseGuards(RolesGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
@@ -113,6 +126,8 @@ export class UsersController {
     status: 201,
     description: 'Return msg',
   })
+  @Roles('USER', 'ADMIN')
+  @UseGuards(RolesGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
@@ -123,6 +138,8 @@ export class UsersController {
     status: 201,
     description: 'Return msg',
   })
+  @Roles('USER', 'ADMIN')
+  @UseGuards(RolesGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

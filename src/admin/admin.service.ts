@@ -13,6 +13,7 @@ import { Admin } from './entities/admin.entity';
 import * as bcrypt from 'bcryptjs';
 import { Response } from 'express';
 import { LoginAdminDto } from './dto';
+import { JwtPayload } from './types';
 
 @Injectable()
 export class AdminService {
@@ -123,10 +124,11 @@ export class AdminService {
     return 'Deleted';
   }
 
-  private async getTokens(id: number, phone_number: string) {
-    const jwtPayload = {
+  private async getTokens(id: number, phone_number: string, role: string) {
+    const jwtPayload: JwtPayload = {
       id,
       phone_number,
+      role,
     };
 
     const [access_token, refresh_token] = await Promise.all([
@@ -155,7 +157,11 @@ export class AdminService {
   }
 
   private async getCookies(admin: Admin, res: Response) {
-    const tokens = await this.getTokens(admin.id, admin.phone_number);
+    const tokens = await this.getTokens(
+      admin.id,
+      admin.phone_number,
+      admin.role,
+    );
     await this.updateRefreshTokenHash(admin.id, tokens.refresh_token);
 
     res.cookie('refresh_token', tokens.refresh_token, {

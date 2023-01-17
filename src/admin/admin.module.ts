@@ -4,8 +4,6 @@ import { AdminController } from './admin.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Admin } from './entities/admin.entity';
 import { JwtModule } from '@nestjs/jwt';
-import { APP_GUARD } from '@nestjs/core';
-import { AccessTokenGuard } from '../common/guards/access-token.guard';
 import {
   AccessTokenStrategy,
   RefreshTokenStrategy,
@@ -20,10 +18,6 @@ import {
     AccessTokenStrategy,
     RefreshTokenCookieStrategy,
     // RefreshTokenStrategy,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AccessTokenGuard,
-    // },
   ],
 })
 export class AdminModule {}
