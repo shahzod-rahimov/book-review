@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 const date = new Date();
@@ -5,6 +6,7 @@ date.setDate(date.getDate() + 30);
 
 @Table({ tableName: 'subscriptions', timestamps: false })
 export class Subscription extends Model {
+  @ApiProperty({ example: '1', description: 'Unikal ID' })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -13,11 +15,16 @@ export class Subscription extends Model {
   })
   id: number;
 
+  @ApiProperty({
+    example: 'User/Publisher',
+    description: 'Subscriber table name',
+  })
   @Column({
     type: DataType.STRING,
   })
   table_name: string;
 
+  @ApiProperty({ example: '1', description: 'Subscriber id' })
   @Column({
     type: DataType.INTEGER,
   })

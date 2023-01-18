@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   BelongsTo,
   Column,
@@ -11,6 +12,7 @@ import { User } from '../../users/entities/user.entity';
 
 @Table({ tableName: 'reviews' })
 export class Review extends Model {
+  @ApiProperty({ example: '1', description: 'Unikal ID' })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -19,6 +21,7 @@ export class Review extends Model {
   })
   id: number;
 
+  @ApiProperty({ example: 'qwerty', description: 'Review title' })
   @Column({
     type: DataType.STRING,
     validate: {
@@ -27,22 +30,29 @@ export class Review extends Model {
   })
   title: string;
 
+  @ApiProperty({
+    example: 'qwertyuiop asdfghjkl zxcvbnm',
+    description: 'Review text',
+  })
   @Column({
     type: DataType.STRING,
   })
   text: string;
 
+  @ApiProperty({ example: 'true', description: 'Is review checked' })
   @Column({
     type: DataType.STRING,
   })
   is_checked: string;
 
+  @ApiProperty({ example: '1', description: 'Book id' })
   @ForeignKey(() => Book)
   @Column({
     type: DataType.INTEGER,
   })
   book_id: number;
 
+  @ApiProperty({ example: '2', description: 'User id' })
   @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
